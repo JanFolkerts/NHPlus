@@ -44,6 +44,18 @@ public class AllTreatmentController {
     private TableColumn<Treatment, String> columnDescription;
 
     @FXML
+    private TableColumn<Treatment, String> columnCaregiverSurname;
+
+    @FXML
+    private TableColumn<Treatment, String> columnCaregiverFirstName;
+
+    @FXML
+    private TableColumn<Treatment, String> columnCaregiverPhonenumber;
+
+    @FXML
+    private ComboBox<String> comboBoxCaregiverSelection;
+
+    @FXML
     private ComboBox<String> comboBoxPatientSelection;
 
     @FXML

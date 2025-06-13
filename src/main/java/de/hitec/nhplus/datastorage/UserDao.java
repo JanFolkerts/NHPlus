@@ -123,6 +123,7 @@ public class UserDao extends DaoImp<User> {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setInt(3, user.getId());
+            preparedStatement = this.connection.prepareStatement(SQL);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -141,6 +142,7 @@ public class UserDao extends DaoImp<User> {
         try {
             final String SQL = "DELETE FROM user WHERE id = ?";
             preparedStatement.setLong(1, uid);
+            preparedStatement = this.connection.prepareStatement(SQL);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }

@@ -54,6 +54,11 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Creates the table for caregivers with necessary fields.
+     *
+     * @param connection Database connection.
+     */
     private static void setUpTableCaregiver(Connection connection) {
         final String SQL = "CREATE TABLE IF NOT EXISTS caregiver (" +
                 "   cid INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -68,6 +73,12 @@ public class SetUpDB {
             System.out.println(exception.getMessage());
         }
     }
+
+    /**
+     * Creates the table for patients with necessary fields.
+     *
+     * @param connection Database connection.
+     */
 
     private static void setUpTablePatient(Connection connection) {
         final String SQL = "CREATE TABLE IF NOT EXISTS patient (" +
@@ -85,6 +96,11 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Creates the table for treatments with necessary fields and foreign key to patient.
+     *
+     * @param connection Database connection.
+     */
     private static void setUpTableTreatment(Connection connection) {
         final String SQL = "CREATE TABLE IF NOT EXISTS treatment (" +
                 "   tid INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -104,6 +120,11 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Creates the table for users with username and encrypted password.
+     *
+     * @param connection Database connection.
+     */
     private static void setUpTableUser(Connection connection) {
         final String SQL = "CREATE TABLE IF NOT EXISTS user (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -118,6 +139,9 @@ public class SetUpDB {
     }
 
 
+    /**
+     * Inserts predefined patient records into the patient table.
+     */
     private static void setUpPatients() {
         try {
             PatientDao dao = DaoFactory.getDaoFactory().createPatientDAO();
@@ -132,6 +156,9 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Inserts predefined treatment records into the treatment table.
+     */
     private static void setUpTreatments() {
         try {
             TreatmentDao dao = DaoFactory.getDaoFactory().createTreatmentDao();
@@ -150,6 +177,11 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Inserts test user credentials with encrypted password into the user table.
+     *
+     * @param connection Database connection.
+     */
     private static void setUpTestUsers(Connection connection) {
         final String SQL = "INSERT INTO user (username, password) VALUES (?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(SQL)) {
@@ -162,6 +194,9 @@ public class SetUpDB {
         }
     }
 
+    /**
+     * Executes the setup of the database when the class is run.
+     */
     public static void main(String[] args) {
         SetUpDB.setUpDb();
     }

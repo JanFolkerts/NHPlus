@@ -4,6 +4,8 @@ import de.hitec.nhplus.Main;
 import de.hitec.nhplus.datastorage.DaoFactory;
 import de.hitec.nhplus.datastorage.PatientDao;
 import de.hitec.nhplus.datastorage.TreatmentDao;
+import de.hitec.nhplus.model.Patient;
+import de.hitec.nhplus.model.Treatment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,13 +15,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import de.hitec.nhplus.model.Patient;
-import de.hitec.nhplus.model.Treatment;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The <code>AllTreatmentController</code> manages the logic of the treatment view.
+ * It handles displaying, filtering, adding, editing, and deleting treatments.
+ */
 public class AllTreatmentController {
 
     @FXML
@@ -54,6 +58,9 @@ public class AllTreatmentController {
     private final ObservableList<String> patientSelection = FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
 
+    /**
+     * Initializes the controller. Loads all treatments and configures UI components.
+     */
     public void initialize() {
         readAllAndShowInTableView();
         comboBoxPatientSelection.setItems(patientSelection);
@@ -66,8 +73,6 @@ public class AllTreatmentController {
         this.columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
         this.columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         this.tableView.setItems(this.treatments);
-
-        // Disabling the button to delete treatments as long, as no treatment was selected.
         this.buttonDelete.setDisable(true);
         this.tableView.getSelectionModel().selectedItemProperty().addListener(
                 (observableValue, oldTreatment, newTreatment) ->
@@ -76,6 +81,9 @@ public class AllTreatmentController {
         this.createComboBoxData();
     }
 
+    /**
+     * Loads all treatments and displays them in the <code>TableView</code>.
+     */
     public void readAllAndShowInTableView() {
         this.treatments.clear();
         comboBoxPatientSelection.getSelectionModel().select(0);
@@ -87,12 +95,15 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Fills the patient selection <code>ComboBox</code> with all available patients.
+     */
     private void createComboBoxData() {
         PatientDao dao = DaoFactory.getDaoFactory().createPatientDAO();
         try {
             patientList = (ArrayList<Patient>) dao.readAll();
             this.patientSelection.add("alle");
-            for (Patient patient: patientList) {
+            for (Patient patient : patientList) {
                 this.patientSelection.add(patient.getSurname());
             }
         } catch (SQLException exception) {
@@ -101,6 +112,9 @@ public class AllTreatmentController {
     }
 
 
+    /**
+     * Handles selection changes in the <code>ComboBox</code> and filters treatments by patient.
+     */
     @FXML
     public void handleComboBox() {
         String selectedPatient = this.comboBoxPatientSelection.getSelectionModel().getSelectedItem();
@@ -116,7 +130,7 @@ public class AllTreatmentController {
         }
 
         Patient patient = searchInList(selectedPatient);
-        if (patient !=null) {
+        if (patient != null) {
             try {
                 this.treatments.addAll(this.dao.readTreatmentsByPid(patient.getPid()));
             } catch (SQLException exception) {
@@ -125,6 +139,12 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Searches for a patient in the internal list by surname.
+     *
+     * @param surname Surname of the patient.
+     * @return Matching patient or null if not found.
+     */
     private Patient searchInList(String surname) {
         for (Patient patient : this.patientList) {
             if (patient.getSurname().equals(surname)) {
@@ -134,6 +154,10 @@ public class AllTreatmentController {
         return null;
     }
 
+    /**
+     * Handles the event when the delete button is clicked.
+     * Deletes the selected treatment from database and removes it from the table.
+     */
     @FXML
     public void handleDelete() {
         int index = this.tableView.getSelectionModel().getSelectedIndex();
@@ -146,13 +170,17 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Opens the dialog to create a new treatment for the selected patient.
+     * If no patient is selected, an alert is shown.
+     */
     @FXML
     public void handleNewTreatment() {
-        try{
+        try {
             String selectedPatient = this.comboBoxPatientSelection.getSelectionModel().getSelectedItem();
             Patient patient = searchInList(selectedPatient);
             newTreatmentWindow(patient);
-        } catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             alert.setHeaderText("Patient für die Behandlung fehlt!");
@@ -161,6 +189,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Handles double-clicks on a row in the <code>TableView</code> to open the treatment detail view.
+     */
     @FXML
     public void handleMouseClick() {
         tableView.setOnMouseClicked(event -> {
@@ -172,6 +203,11 @@ public class AllTreatmentController {
         });
     }
 
+    /**
+     * Opens the window to create a new treatment for a patient.
+     *
+     * @param patient The patient for whom the treatment is created.
+     */
     public void newTreatmentWindow(Patient patient) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/de/hitec/nhplus/NewTreatmentView.fxml"));
@@ -192,7 +228,13 @@ public class AllTreatmentController {
         }
     }
 
-    public void treatmentWindow(Treatment treatment){
+    /**
+     * Opens the window to view or edit a treatment.
+     *
+     * @param treatment The treatment to be shown.
+     */
+
+    public void treatmentWindow(Treatment treatment) {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/de/hitec/nhplus/TreatmentView.fxml"));
             AnchorPane pane = loader.load();

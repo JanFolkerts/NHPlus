@@ -3,16 +3,23 @@ package de.hitec.nhplus.controller;
 import de.hitec.nhplus.datastorage.DaoFactory;
 import de.hitec.nhplus.datastorage.PatientDao;
 import de.hitec.nhplus.datastorage.TreatmentDao;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
 import de.hitec.nhplus.model.Patient;
 import de.hitec.nhplus.model.Treatment;
 import de.hitec.nhplus.utils.DateConverter;
+import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+/**
+ * Controller class for the treatment editing window.
+ * Displays and allows editing of an existing treatment.
+ */
 public class TreatmentController {
 
     @FXML
@@ -41,9 +48,17 @@ public class TreatmentController {
     private Patient patient;
     private Treatment treatment;
 
+    /**
+     * Initializes the controller with the main treatment controller, the stage, and the selected treatment.
+     * Loads the related patient and displays all treatment details.
+     *
+     * @param controller the calling controller for updating the table view
+     * @param stage      the current stage (window)
+     * @param treatment  the treatment to be displayed and edited
+     */
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
-        this.controller= controller;
+        this.controller = controller;
         PatientDao pDao = DaoFactory.getDaoFactory().createPatientDAO();
         try {
             this.patient = pDao.read((int) treatment.getPid());
@@ -54,8 +69,11 @@ public class TreatmentController {
         }
     }
 
-    private void showData(){
-        this.labelPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
+    /**
+     * Displays the current treatment and associated patient data in the UI fields.
+     */
+    private void showData() {
+        this.labelPatientName.setText(patient.getSurname() + ", " + patient.getFirstName());
         this.labelCareLevel.setText(patient.getCareLevel());
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datePicker.setValue(date);
@@ -65,8 +83,13 @@ public class TreatmentController {
         this.textAreaRemarks.setText(this.treatment.getRemarks());
     }
 
+    /**
+     * Called when the "Save" or "Apply" button is clicked.
+     * Updates the treatment object with the user input and saves it to the database.
+     * Refreshes the main table and closes the window.
+     */
     @FXML
-    public void handleChange(){
+    public void handleChange() {
         this.treatment.setDate(this.datePicker.getValue().toString());
         this.treatment.setBegin(textFieldBegin.getText());
         this.treatment.setEnd(textFieldEnd.getText());
@@ -77,7 +100,10 @@ public class TreatmentController {
         stage.close();
     }
 
-    private void doUpdate(){
+    /**
+     * Updates the treatment record in the database.
+     */
+    private void doUpdate() {
         TreatmentDao dao = DaoFactory.getDaoFactory().createTreatmentDao();
         try {
             dao.update(treatment);
@@ -86,8 +112,12 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Called when the "Cancel" button is clicked.
+     * Closes the current window without saving any changes.
+     */
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 }

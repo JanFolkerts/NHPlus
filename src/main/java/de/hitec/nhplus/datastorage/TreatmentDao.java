@@ -111,7 +111,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
-        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        ArrayList<Treatment> list = new ArrayList<>();
         while (result.next()) {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
             LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
@@ -172,7 +172,8 @@ public class TreatmentDao extends DaoImp<Treatment> {
                             "begin = ?, " +
                             "end = ?, " +
                             "description = ?, " +
-                            "remark = ? " +
+                            "remark = ?, " +
+                            "cid = ? " +
                             "WHERE tid = ?";
             preparedStatement = this.connection.prepareStatement(SQL);
             preparedStatement.setLong(1, treatment.getPid());
@@ -181,7 +182,8 @@ public class TreatmentDao extends DaoImp<Treatment> {
             preparedStatement.setString(4, treatment.getEnd());
             preparedStatement.setString(5, treatment.getDescription());
             preparedStatement.setString(6, treatment.getRemarks());
-            preparedStatement.setLong(7, treatment.getTid());
+            preparedStatement.setLong(7, treatment.getCaregiverId());
+            preparedStatement.setLong(8, treatment.getTid());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -191,7 +193,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
     /**
      * Generates a <code>PreparedStatement</code> to delete a treatment with the given id.
      *
-     * @param tid Id of the Treatment to delete.
+     * @param tid ID of the Treatment to delete.
      * @return <code>PreparedStatement</code> to delete treatment with the given id.
      */
     @Override

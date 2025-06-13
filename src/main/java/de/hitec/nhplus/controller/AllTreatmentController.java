@@ -1,6 +1,7 @@
 package de.hitec.nhplus.controller;
 
 import de.hitec.nhplus.Main;
+import de.hitec.nhplus.datastorage.CaregiverDao;
 import de.hitec.nhplus.datastorage.DaoFactory;
 import de.hitec.nhplus.datastorage.PatientDao;
 import de.hitec.nhplus.datastorage.TreatmentDao;
@@ -48,7 +49,7 @@ public class AllTreatmentController {
     private TableColumn<Treatment, String> columnCaregiverSurname;
 
     @FXML
-    private TableColumn<Treatment, String> columnCaregiverFirstName;
+    private TableColumn<Treatment, String> columnCaregiverFirstname;
 
     @FXML
     private TableColumn<Treatment, String> columnCaregiverPhonenumber;
@@ -65,6 +66,7 @@ public class AllTreatmentController {
     private final ObservableList<Treatment> treatments = FXCollections.observableArrayList();
     private TreatmentDao dao;
     private final ObservableList<String> patientSelection = FXCollections.observableArrayList();
+    private final ObservableList<String> caregiverSelection = FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
     private ArrayList<Caregiver> caregiverList;
 
@@ -73,12 +75,18 @@ public class AllTreatmentController {
         comboBoxPatientSelection.setItems(patientSelection);
         comboBoxPatientSelection.getSelectionModel().select(0);
 
+        comboBoxCaregiverSelection.setItems(caregiverSelection);
+        comboBoxCaregiverSelection.getSelectionModel().select(0);
+
         this.columnId.setCellValueFactory(new PropertyValueFactory<>("tid"));
         this.columnPid.setCellValueFactory(new PropertyValueFactory<>("pid"));
         this.columnDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         this.columnBegin.setCellValueFactory(new PropertyValueFactory<>("begin"));
         this.columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
         this.columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+        this.columnCaregiverSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
+        this.columnCaregiverFirstname.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+        this.columnCaregiverPhonenumber.setCellValueFactory(new PropertyValueFactory<>("phonenumber"));
         this.tableView.setItems(this.treatments);
 
         // Disabling the button to delete treatments as long, as no treatment was selected.
@@ -87,32 +95,58 @@ public class AllTreatmentController {
                 (observableValue, oldTreatment, newTreatment) ->
                         AllTreatmentController.this.buttonDelete.setDisable(newTreatment == null));
 
-        this.createComboBoxData();
+        this.createComboBoxPatientData();
+        this.createComboBoxCaregiverData();
     }
 
     public void readAllAndShowInTableView() {
-        this.treatments.clear();
         comboBoxPatientSelection.getSelectionModel().select(0);
+        comboBoxCaregiverSelection.getSelectionModel().select(0);
         this.dao = DaoFactory.getDaoFactory().createTreatmentDao();
         try {
+            this.treatments.clear();
             this.treatments.addAll(dao.readAll());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
 
-    private void createComboBoxData() {
+    private void createComboBoxPatientData() {
+        patientSelection.clear();
+        this.patientSelection.add("alle");
+
         PatientDao dao = DaoFactory.getDaoFactory().createPatientDAO();
         try {
             patientList = (ArrayList<Patient>) dao.readAll();
-            this.patientSelection.add("alle");
             for (Patient patient: patientList) {
                 this.patientSelection.add(patient.getSurname());
             }
+            comboBoxPatientSelection.setItems(patientSelection);
+            comboBoxPatientSelection.getSelectionModel().selectFirst();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
     }
+
+    private void createComboBoxCaregiverData() {
+        caregiverSelection.clear();
+        caregiverSelection.add("alle");
+
+        CaregiverDao dao = DaoFactory.getDaoFactory().createCaregiverDAO();
+        try {
+            caregiverList = (ArrayList<Caregiver>) dao.readAll();
+            for (Caregiver caregiver : caregiverList) {
+                if (caregiver.isActive()) {
+                    caregiverSelection.add(caregiver.getSurname());
+                }
+            }
+            comboBoxCaregiverSelection.setItems(caregiverSelection);
+            comboBoxCaregiverSelection.getSelectionModel().selectFirst();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
 
 
     @FXML
@@ -171,20 +205,36 @@ public class AllTreatmentController {
 
     @FXML
     public void handleNewTreatment() {
-        try{
+        try {
             String selectedPatient = this.comboBoxPatientSelection.getSelectionModel().getSelectedItem();
             Patient patient = searchPatientInList(selectedPatient);
             String selectedCaregiver = this.comboBoxCaregiverSelection.getSelectionModel().getSelectedItem();
             Caregiver caregiver = searchCaregiverInList(selectedCaregiver);
+
+            if (patient == null) {
+                throw new NullPointerException("Kein Patient ausgewählt");
+            }
+
+            if (selectedCaregiver.equals("alle")) {
+                throw new NullPointerException("Kein Pfleger ausgewählt");
+            }
+
+
             newTreatmentWindow(patient, caregiver);
-        } catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
-            alert.setHeaderText("Patient für die Behandlung fehlt!");
-            alert.setContentText("Wählen Sie über die Combobox einen Patienten aus!");
+            if (exception.getMessage().equals("Kein Patient ausgewählt")) {
+                alert.setHeaderText("Patient für die Behandlung fehlt!");
+                alert.setContentText("Wählen Sie über die Combobox einen Patienten aus!");
+            } else if (exception.getMessage().equals("Kein Pfleger ausgewählt")) {
+                alert.setHeaderText("Kein Pfleger ausgewählt");
+                alert.setContentText("Bitte wählen Sie einen konkreten Pfleger aus der Liste aus!");
+            }
             alert.showAndWait();
         }
     }
+
 
     @FXML
     public void handleMouseClick() {

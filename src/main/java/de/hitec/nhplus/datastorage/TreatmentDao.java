@@ -1,5 +1,6 @@
 package de.hitec.nhplus.datastorage;
 
+import de.hitec.nhplus.model.Caregiver;
 import de.hitec.nhplus.model.Treatment;
 import de.hitec.nhplus.utils.DateConverter;
 
@@ -77,12 +78,41 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected Treatment getInstanceFromResultSet(ResultSet result) throws SQLException {
+        System.out.println("Geladene CaregiverID: " + result.getLong("cid"));
+        System.out.println("Geladener Nachname: " + result.getString("surname"));
+        System.out.println("Geladener Vorname: " + result.getString("firstname"));
+        System.out.println("Geladene Telefonnummer: " + result.getString("phonenumber"));
+
+
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
         LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
         LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
-        return new Treatment(result.getLong(1), result.getLong(2),
-                date, begin, end, result.getString(6), result.getString(7), result.getLong(8));
+
+        return new Treatment(
+                result.getLong("tid"), result.getLong("pid"),
+                date,
+                begin,
+                end,
+                result.getString("description"),
+                result.getString("remark"),
+                result.getLong("cid"),
+                result.getString("surname"),
+                result.getString("firstname"),
+                result.getString("phonenumber")
+        );
+
     }
+
+    private Caregiver getCaregiverById(long caregiverId) {
+        CaregiverDao caregiverDao = DaoFactory.getDaoFactory().createCaregiverDAO();
+        try {
+            return caregiverDao.read(caregiverId); // Holt den Caregiver anhand der ID aus der Datenbank
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return new Caregiver("Unbekannt", "", "", null); // Fallback bei Fehler
+        }
+    }
+
 
     /**
      * Generates a <code>PreparedStatement</code> to query all treatments.
@@ -91,15 +121,17 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected PreparedStatement getReadAllStatement() {
-        PreparedStatement statement = null;
         try {
-            final String SQL = "SELECT * FROM treatment";
-            statement = this.connection.prepareStatement(SQL);
+            final String SQL = "SELECT t.tid, t.pid, t.treatment_date, t.begin, t.end, t.description, t.remark, t.cid, c.surname, c.firstname, c.phonenumber " +
+                    "FROM treatment t " +
+                    "INNER JOIN caregiver c ON t.cid = c.cid";
+            return this.connection.prepareStatement(SQL);
         } catch (SQLException exception) {
             exception.printStackTrace();
+            return null;
         }
-        return statement;
     }
+
 
     /**
      * Maps a <code>ResultSet</code> of all treatments to an <code>ArrayList</code> with objects of class
@@ -116,12 +148,25 @@ public class TreatmentDao extends DaoImp<Treatment> {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
             LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
             LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
-            Treatment treatment = new Treatment(result.getLong(1), result.getLong(2),
-                    date, begin, end, result.getString(6), result.getString(7), result.getLong(8));
+            long caregiverId = result.getLong("cid");
+
+            Treatment treatment = new Treatment(
+                    result.getLong("tid"), result.getLong("pid"),
+                    date,
+                    begin,
+                    end,
+                    result.getString("description"),
+                    result.getString("remark"),
+                    caregiverId, // Wird gesetzt, aber nicht in der UI angezeigt
+                    result.getString("surname"),
+                    result.getString("firstname"),
+                    result.getString("phonenumber") // Pflegekraft-Daten hinzufügen
+            );
             list.add(treatment);
         }
         return list;
     }
+
 
     /**
      * Generates a <code>PreparedStatement</code> to query all treatments of a patient with a given patient id (pid).

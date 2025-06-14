@@ -54,7 +54,7 @@ public class NewTreatmentController {
     private Caregiver caregiver;
 
     public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Caregiver caregiver) {
-        this.controller= controller;
+        this.controller = controller;
         this.patient = patient;
         this.stage = stage;
         this.caregiver = caregiver;
@@ -81,13 +81,13 @@ public class NewTreatmentController {
         this.showPatientData();
     }
 
-    private void showPatientData(){
+    private void showPatientData() {
         this.labelFirstName.setText(patient.getFirstName());
         this.labelSurname.setText(patient.getSurname());
     }
 
     @FXML
-    public void handleAdd(){
+    public void handleAdd() {
         LocalDate date = this.datePicker.getValue();
         LocalTime begin = DateConverter.convertStringToLocalTime(textFieldBegin.getText());
         LocalTime end = DateConverter.convertStringToLocalTime(textFieldEnd.getText());
@@ -109,7 +109,7 @@ public class NewTreatmentController {
     }
 
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 

@@ -84,9 +84,9 @@ public class AllTreatmentController {
         this.columnBegin.setCellValueFactory(new PropertyValueFactory<>("begin"));
         this.columnEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
         this.columnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
-        this.columnCaregiverSurname.setCellValueFactory(new PropertyValueFactory<>("surname"));
-        this.columnCaregiverFirstname.setCellValueFactory(new PropertyValueFactory<>("firstname"));
-        this.columnCaregiverPhonenumber.setCellValueFactory(new PropertyValueFactory<>("phonenumber"));
+        this.columnCaregiverSurname.setCellValueFactory(new PropertyValueFactory<>("caregiverSurname"));
+        this.columnCaregiverFirstname.setCellValueFactory(new PropertyValueFactory<>("caregiverFirstname"));
+        this.columnCaregiverPhonenumber.setCellValueFactory(new PropertyValueFactory<>("caregiverPhonenumber"));
         this.tableView.setItems(this.treatments);
 
         // Disabling the button to delete treatments as long, as no treatment was selected.

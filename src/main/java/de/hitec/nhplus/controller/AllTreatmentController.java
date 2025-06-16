@@ -220,7 +220,6 @@ public class AllTreatmentController {
                 throw new NullPointerException("Kein Pfleger ausgewählt");
             }
 
-
             newTreatmentWindow(patient, caregiver);
         } catch (NullPointerException exception) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -97,7 +97,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
                 result.getString("remark"),
                 result.getLong("cid"),
                 result.getString("surname"),
-                result.getString("firstname"),
+                result.getString("sirstname"),
                 result.getString("phonenumber")
         );
 
@@ -149,6 +149,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
             LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
             LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
             long caregiverId = result.getLong("cid");
+            Caregiver caregiver = getCaregiverById(caregiverId);
 
             Treatment treatment = new Treatment(
                     result.getLong("tid"), result.getLong("pid"),
@@ -158,9 +159,9 @@ public class TreatmentDao extends DaoImp<Treatment> {
                     result.getString("description"),
                     result.getString("remark"),
                     caregiverId, // Wird gesetzt, aber nicht in der UI angezeigt
-                    result.getString("surname"),
-                    result.getString("firstname"),
-                    result.getString("phonenumber") // Pflegekraft-Daten hinzufügen
+                    caregiver.getSurname(),
+                    caregiver.getFirstName(),
+                    caregiver.getPhoneNumber() // Pflegekraft-Daten hinzufügen
             );
             list.add(treatment);
         }

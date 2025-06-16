@@ -25,10 +25,10 @@ public class NewTreatmentController {
     private Label labelSurname;
 
     @FXML
-    private Label labelCaregiverSurname;
+    private Label labelCaregiverPhonenumber;
 
     @FXML
-    private Label labelCaregiverFirstName;
+    private Label labelCaregiverName;
 
     @FXML
     private TextField textFieldBegin;
@@ -78,6 +78,8 @@ public class NewTreatmentController {
                 return DateConverter.convertStringToLocalDate(localDate);
             }
         });
+        this.labelCaregiverName.setText(caregiver.getFirstName()+", "+caregiver.getSurname());
+        this.labelCaregiverPhonenumber.setText(caregiver.getPhoneNumber());
         this.showPatientData();
     }
 

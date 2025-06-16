@@ -1,8 +1,10 @@
 package de.hitec.nhplus.controller;
 
+import de.hitec.nhplus.datastorage.CaregiverDao;
 import de.hitec.nhplus.datastorage.DaoFactory;
 import de.hitec.nhplus.datastorage.PatientDao;
 import de.hitec.nhplus.datastorage.TreatmentDao;
+import de.hitec.nhplus.model.Caregiver;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -20,6 +22,12 @@ public class TreatmentController {
 
     @FXML
     private Label labelCareLevel;
+
+    @FXML
+    private Label labelCaregiverName;
+
+    @FXML
+    private Label labelCaregiverPhonenumber;
 
     @FXML
     private TextField textFieldBegin;
@@ -40,14 +48,17 @@ public class TreatmentController {
     private Stage stage;
     private Patient patient;
     private Treatment treatment;
+    private Caregiver caregiver;
 
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller= controller;
         PatientDao pDao = DaoFactory.getDaoFactory().createPatientDAO();
+        CaregiverDao cDao = DaoFactory.getDaoFactory().createCaregiverDAO();
         try {
             this.patient = pDao.read((int) treatment.getPid());
             this.treatment = treatment;
+            this.caregiver = cDao.read((int)treatment.getCaregiverId());
             showData();
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -57,6 +68,9 @@ public class TreatmentController {
     private void showData(){
         this.labelPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
         this.labelCareLevel.setText(patient.getCareLevel());
+        this.labelCaregiverName.setText(this.caregiver.getSurname()+", "+this.caregiver.getFirstName());
+        this.labelCaregiverPhonenumber.setText(this.caregiver.getPhoneNumber());
+
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datePicker.setValue(date);
         this.textFieldBegin.setText(this.treatment.getBegin());

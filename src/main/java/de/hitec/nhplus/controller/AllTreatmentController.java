@@ -176,6 +176,7 @@ public class AllTreatmentController {
     private Patient searchPatientInList(String surname) {
         for (Patient patient : this.patientList) {
             if (patient.getSurname().equals(surname)) {
+
                 return patient;
             }
         }

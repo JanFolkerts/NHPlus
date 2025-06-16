@@ -1,5 +1,6 @@
 package de.hitec.nhplus.datastorage;
 
+import de.hitec.nhplus.model.Caregiver;
 import de.hitec.nhplus.model.Treatment;
 import de.hitec.nhplus.utils.DateConverter;
 
@@ -34,8 +35,8 @@ public class TreatmentDao extends DaoImp<Treatment> {
     protected PreparedStatement getCreateStatement(Treatment treatment) {
         PreparedStatement preparedStatement = null;
         try {
-            final String SQL = "INSERT INTO treatment (pid, treatment_date, begin, end, description, remark) " +
-                    "VALUES (?, ?, ?, ?, ?, ?)";
+            final String SQL = "INSERT INTO treatment (pid, treatment_date, begin, end, description, remark, cid) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = this.connection.prepareStatement(SQL);
             preparedStatement.setLong(1, treatment.getPid());
             preparedStatement.setString(2, treatment.getDate());
@@ -43,6 +44,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
             preparedStatement.setString(4, treatment.getEnd());
             preparedStatement.setString(5, treatment.getDescription());
             preparedStatement.setString(6, treatment.getRemarks());
+            preparedStatement.setLong(7, treatment.getCaregiverId());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -76,12 +78,41 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected Treatment getInstanceFromResultSet(ResultSet result) throws SQLException {
+        System.out.println("Geladene CaregiverID: " + result.getLong("cid"));
+        System.out.println("Geladener Nachname: " + result.getString("surname"));
+        System.out.println("Geladener Vorname: " + result.getString("firstname"));
+        System.out.println("Geladene Telefonnummer: " + result.getString("phonenumber"));
+
+
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
         LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
         LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
-        return new Treatment(result.getLong(1), result.getLong(2),
-                date, begin, end, result.getString(6), result.getString(7));
+
+        return new Treatment(
+                result.getLong("tid"), result.getLong("pid"),
+                date,
+                begin,
+                end,
+                result.getString("description"),
+                result.getString("remark"),
+                result.getLong("cid"),
+                result.getString("surname"),
+                result.getString("sirstname"),
+                result.getString("phonenumber")
+        );
+
     }
+
+    private Caregiver getCaregiverById(long caregiverId) {
+        CaregiverDao caregiverDao = DaoFactory.getDaoFactory().createCaregiverDAO();
+        try {
+            return caregiverDao.read(caregiverId); // Holt den Caregiver anhand der ID aus der Datenbank
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return new Caregiver("Unbekannt", "", "", null); // Fallback bei Fehler
+        }
+    }
+
 
     /**
      * Generates a <code>PreparedStatement</code> to query all treatments.
@@ -90,15 +121,17 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected PreparedStatement getReadAllStatement() {
-        PreparedStatement statement = null;
         try {
-            final String SQL = "SELECT * FROM treatment";
-            statement = this.connection.prepareStatement(SQL);
+            final String SQL = "SELECT t.tid, t.pid, t.treatment_date, t.begin, t.end, t.description, t.remark, t.cid, c.surname, c.firstname, c.phonenumber " +
+                    "FROM treatment t " +
+                    "INNER JOIN caregiver c ON t.cid = c.cid";
+            return this.connection.prepareStatement(SQL);
         } catch (SQLException exception) {
             exception.printStackTrace();
+            return null;
         }
-        return statement;
     }
+
 
     /**
      * Maps a <code>ResultSet</code> of all treatments to an <code>ArrayList</code> with objects of class
@@ -110,17 +143,31 @@ public class TreatmentDao extends DaoImp<Treatment> {
      */
     @Override
     protected ArrayList<Treatment> getListFromResultSet(ResultSet result) throws SQLException {
-        ArrayList<Treatment> list = new ArrayList<Treatment>();
+        ArrayList<Treatment> list = new ArrayList<>();
         while (result.next()) {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
             LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
             LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
-            Treatment treatment = new Treatment(result.getLong(1), result.getLong(2),
-                    date, begin, end, result.getString(6), result.getString(7));
+            long caregiverId = result.getLong("cid");
+            Caregiver caregiver = getCaregiverById(caregiverId);
+
+            Treatment treatment = new Treatment(
+                    result.getLong("tid"), result.getLong("pid"),
+                    date,
+                    begin,
+                    end,
+                    result.getString("description"),
+                    result.getString("remark"),
+                    caregiverId, // Wird gesetzt, aber nicht in der UI angezeigt
+                    caregiver.getSurname(),
+                    caregiver.getFirstName(),
+                    caregiver.getPhoneNumber() // Pflegekraft-Daten hinzufügen
+            );
             list.add(treatment);
         }
         return list;
     }
+
 
     /**
      * Generates a <code>PreparedStatement</code> to query all treatments of a patient with a given patient id (pid).
@@ -171,7 +218,8 @@ public class TreatmentDao extends DaoImp<Treatment> {
                             "begin = ?, " +
                             "end = ?, " +
                             "description = ?, " +
-                            "remark = ? " +
+                            "remark = ?, " +
+                            "cid = ? " +
                             "WHERE tid = ?";
             preparedStatement = this.connection.prepareStatement(SQL);
             preparedStatement.setLong(1, treatment.getPid());
@@ -180,7 +228,8 @@ public class TreatmentDao extends DaoImp<Treatment> {
             preparedStatement.setString(4, treatment.getEnd());
             preparedStatement.setString(5, treatment.getDescription());
             preparedStatement.setString(6, treatment.getRemarks());
-            preparedStatement.setLong(7, treatment.getTid());
+            preparedStatement.setLong(7, treatment.getCaregiverId());
+            preparedStatement.setLong(8, treatment.getTid());
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -190,7 +239,7 @@ public class TreatmentDao extends DaoImp<Treatment> {
     /**
      * Generates a <code>PreparedStatement</code> to delete a treatment with the given id.
      *
-     * @param tid Id of the Treatment to delete.
+     * @param tid ID of the Treatment to delete.
      * @return <code>PreparedStatement</code> to delete treatment with the given id.
      */
     @Override

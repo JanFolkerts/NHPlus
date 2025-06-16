@@ -2,6 +2,7 @@ package de.hitec.nhplus.controller;
 
 import de.hitec.nhplus.datastorage.DaoFactory;
 import de.hitec.nhplus.datastorage.TreatmentDao;
+import de.hitec.nhplus.model.Caregiver;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -24,6 +25,12 @@ public class NewTreatmentController {
     private Label labelSurname;
 
     @FXML
+    private Label labelCaregiverSurname;
+
+    @FXML
+    private Label labelCaregiverFirstName;
+
+    @FXML
     private TextField textFieldBegin;
 
     @FXML
@@ -44,11 +51,13 @@ public class NewTreatmentController {
     private AllTreatmentController controller;
     private Patient patient;
     private Stage stage;
+    private Caregiver caregiver;
 
-    public void initialize(AllTreatmentController controller, Stage stage, Patient patient) {
-        this.controller= controller;
+    public void initialize(AllTreatmentController controller, Stage stage, Patient patient, Caregiver caregiver) {
+        this.controller = controller;
         this.patient = patient;
         this.stage = stage;
+        this.caregiver = caregiver;
 
         this.buttonAdd.setDisable(true);
         ChangeListener<String> inputNewPatientListener = (observableValue, oldText, newText) ->
@@ -72,19 +81,19 @@ public class NewTreatmentController {
         this.showPatientData();
     }
 
-    private void showPatientData(){
+    private void showPatientData() {
         this.labelFirstName.setText(patient.getFirstName());
         this.labelSurname.setText(patient.getSurname());
     }
 
     @FXML
-    public void handleAdd(){
+    public void handleAdd() {
         LocalDate date = this.datePicker.getValue();
         LocalTime begin = DateConverter.convertStringToLocalTime(textFieldBegin.getText());
         LocalTime end = DateConverter.convertStringToLocalTime(textFieldEnd.getText());
         String description = textFieldDescription.getText();
         String remarks = textAreaRemarks.getText();
-        Treatment treatment = new Treatment(patient.getPid(), date, begin, end, description, remarks);
+        Treatment treatment = new Treatment(patient.getPid(), date, begin, end, description, remarks, caregiver.getCid());
         createTreatment(treatment);
         controller.readAllAndShowInTableView();
         stage.close();
@@ -100,7 +109,7 @@ public class NewTreatmentController {
     }
 
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 

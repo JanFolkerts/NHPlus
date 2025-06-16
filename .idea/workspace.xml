@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a34ff0ce-7744-41f9-a83e-ef9c348ef1da" name="Changes" comment="Pushen von Armins changes Login" />
+    <list default="true" id="a34ff0ce-7744-41f9-a83e-ef9c348ef1da" name="Changes" comment="feat: alle changes für diese User Story fertig" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,17 +13,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="main" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -32,14 +26,31 @@
     &quot;assignee&quot;: &quot;JanFolkerts&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/JanFolkerts/NHPlus.git&quot;,
-    &quot;accountId&quot;: &quot;2457a6b2-ad10-4bcf-b00f-e580e5e7fadd&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/JanFolkerts/NHPlus.git",
+    "accountId": "2457a6b2-ad10-4bcf-b00f-e580e5e7fadd"
+  },
+  "recentNewPullRequestHead": {
+    "server": {
+      "useHttp": false,
+      "host": "github.com",
+      "port": null,
+      "suffix": null
+    },
+    "owner": "JanFolkerts",
+    "repository": "NHPlus"
   }
-}</component>
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -62,8 +73,9 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "Login",
+    "git-widget-placeholder": "#4 on treatment__combobox",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/sschw/laufender Unterricht/FA24C If/lf5_if_student",
@@ -129,13 +141,15 @@
         <item itemvalue="Application.SetUpDB" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.SetUpDB" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-20.0.2-corretto-20.0.2.1-f644763e9732-27d99999" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -157,6 +171,11 @@
       <workItem from="1743526923857" duration="2891000" />
       <workItem from="1743531464575" duration="33000" />
       <workItem from="1743667721637" duration="357000" />
+      <workItem from="1749541681879" duration="1443000" />
+      <workItem from="1749545138242" duration="323000" />
+      <workItem from="1749811572626" duration="581000" />
+      <workItem from="1749812161346" duration="3335000" />
+      <workItem from="1749816150584" duration="21491000" />
     </task>
     <task id="LOCAL-00001" summary="Readme aktualisiert, Klassendiagramm hinzugefügt, JavaFX IB, Schriftarten aktualisiert">
       <option name="closed" value="true" />
@@ -184,13 +203,45 @@
     </task>
     <task id="LOCAL-00004" summary="Pushen von Armins changes Login">
       <option name="closed" value="true" />
-      <created>1749797609181</created>
+      <created>1749811556619</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1749797609181</updated>
+      <updated>1749811556619</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Pushen von Armins changes Login">
+      <option name="closed" value="true" />
+      <created>1749848042337</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1749848042337</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Pushen von Armins changes Login">
+      <option name="closed" value="true" />
+      <created>1749935808251</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1749935808251</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Pushen von Armins changes Login">
+      <option name="closed" value="true" />
+      <created>1750065978403</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750065978403</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat: alle changes für diese User Story fertig">
+      <option name="closed" value="true" />
+      <created>1750067693752</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750067693752</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,17 +265,7 @@
     <MESSAGE value="Readme aktualisiert, Klassendiagramm hinzugefügt, JavaFX IB, Schriftarten aktualisiert" />
     <MESSAGE value="feat: Caregiver details are now editable, surname, firstname and phonenumber&#10;feat: all textfields need to be filled for the button to be clickable" />
     <MESSAGE value="Pushen von Armins changes Login" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pushen von Armins changes Login" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/de/hitec/nhplus/controller/AllPatientController.java</url>
-          <line>217</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="feat: alle changes für diese User Story fertig" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: alle changes für diese User Story fertig" />
   </component>
 </project>

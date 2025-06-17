@@ -15,6 +15,10 @@ import de.hitec.nhplus.utils.DateConverter;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+/**
+ * Controller class for the treatment editing window.
+ * Displays and allows editing of an existing treatment.
+ */
 public class TreatmentController {
 
     @FXML
@@ -50,6 +54,14 @@ public class TreatmentController {
     private Treatment treatment;
     private Caregiver caregiver;
 
+    /**
+     * Initializes the controller with the main treatment controller, the stage, and the selected treatment.
+     * Loads the related patient and displays all treatment details.
+     *
+     * @param controller the calling controller for updating the table view
+     * @param stage      the current stage (window)
+     * @param treatment  the treatment to be displayed and edited
+     */
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
         this.stage = stage;
         this.controller= controller;
@@ -65,6 +77,9 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Displays the current treatment and associated patient data in the UI fields.
+     */
     private void showData(){
         this.labelPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
         this.labelCareLevel.setText(patient.getCareLevel());
@@ -79,6 +94,11 @@ public class TreatmentController {
         this.textAreaRemarks.setText(this.treatment.getRemarks());
     }
 
+    /**
+     * Called when the "Save" or "Apply" button is clicked.
+     * Updates the treatment object with the user input and saves it to the database.
+     * Refreshes the main table and closes the window.
+     */
     @FXML
     public void handleChange(){
         this.treatment.setDate(this.datePicker.getValue().toString());
@@ -91,6 +111,9 @@ public class TreatmentController {
         stage.close();
     }
 
+    /**
+     * Updates the treatment record in the database.
+     */
     private void doUpdate(){
         TreatmentDao dao = DaoFactory.getDaoFactory().createTreatmentDao();
         try {
@@ -100,6 +123,10 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Called when the "Cancel" button is clicked.
+     * Closes the current window without saving any changes.
+     */
     @FXML
     public void handleCancel(){
         stage.close();

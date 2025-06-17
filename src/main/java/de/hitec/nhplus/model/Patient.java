@@ -58,17 +58,11 @@ public class Patient extends Person {
         return pid.get();
     }
 
-    public SimpleLongProperty pidProperty() {
-        return pid;
-    }
 
     public String getDateOfBirth() {
         return dateOfBirth.get();
     }
 
-    public SimpleStringProperty dateOfBirthProperty() {
-        return dateOfBirth;
-    }
 
     /**
      * Stores the given string as new <code>birthOfDate</code>.
@@ -83,9 +77,6 @@ public class Patient extends Person {
         return careLevel.get();
     }
 
-    public SimpleStringProperty careLevelProperty() {
-        return careLevel;
-    }
 
     public void setCareLevel(String careLevel) {
         this.careLevel.set(careLevel);
@@ -93,10 +84,6 @@ public class Patient extends Person {
 
     public String getRoomNumber() {
         return roomNumber.get();
-    }
-
-    public SimpleStringProperty roomNumberProperty() {
-        return roomNumber;
     }
 
 

@@ -33,6 +33,14 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Handles the action event triggered when the user wants to view all caregivers.
+     * Loads the `AllCaregiverView.fxml` file and sets it in the `mainBorderPane` as the central view.
+     *
+     * @param event The action event triggered by the user.
+     * @throws IOException If an error occurs while loading the FXML file.
+     */
+
     @FXML
     private void handleShowAllCaregiver(ActionEvent event) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/de/hitec/nhplus/AllCaregiverView.fxml"));

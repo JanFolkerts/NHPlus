@@ -66,6 +66,22 @@ public class Treatment {
         this.cid = cid;
     }
 
+    /**
+     * Constructor to initialize an instance of the <code>Treatment</code> class with the specified parameters.
+     * This constructor is used for objects that are already persisted and have a treatment ID (tid).
+     *
+     * @param tid                   Unique identifier of the treatment.
+     * @param pid                   Unique identifier of the treated patient.
+     * @param date                  Date of the treatment session.
+     * @param begin                 Start time of the treatment (format: "hh:MM").
+     * @param end                   End time of the treatment (format: "hh:MM").
+     * @param description           Description detailing the treatment procedure.
+     * @param remarks               Additional remarks regarding the treatment.
+     * @param cid                   Unique identifier of the assigned caregiver.
+     * @param caregiverSurname      Last name of the caregiver responsible for the treatment.
+     * @param caregiverFirstname    First name of the caregiver.
+     * @param caregiverPhonenumber  Contact number of the caregiver.
+     */
     public Treatment(long tid, long pid, LocalDate date, LocalTime begin, LocalTime end, String description, String remarks,
                      long cid, String caregiverSurname, String caregiverFirstname, String caregiverPhonenumber) {
         this.tid = tid;
@@ -105,6 +121,7 @@ public class Treatment {
         return cid;
     }
 
+
     public void setDate(String date) {
         this.date = DateConverter.convertStringToLocalDate(date);
     }
@@ -133,29 +150,71 @@ public class Treatment {
         this.remarks = remarks;
     }
 
+    /**
+     * Retrieves the unique identifier of the caregiver associated with this treatment.
+     *
+     * @return The caregiver's ID (`cid`).
+     */
+
     public long getCid() {
         return cid;
     }
+
+    /**
+     * Retrieves the surname of the caregiver associated with this treatment.
+     *
+     * @return The caregiver's last name.
+     */
 
     public String getCaregiverSurname() {
         return caregiverSurname;
     }
 
+    /**
+     * Sets the surname of the caregiver associated with this treatment.
+     *
+     * @param caregiverSurname The last name of the caregiver.
+     */
+
     public void setCaregiverSurname(String caregiverSurname) {
         this.caregiverSurname = caregiverSurname;
     }
+
+    /**
+     * Retrieves the first name of the caregiver associated with this treatment.
+     *
+     * @return The caregiver's first name.
+     */
 
     public String getCaregiverFirstname() {
         return caregiverFirstname;
     }
 
+    /**
+     * Sets the first name of the caregiver associated with this treatment.
+     *
+     * @param caregiverFirstname The first name of the caregiver.
+     */
+
     public void setCaregiverFirstname(String caregiverFirstname) {
         this.caregiverFirstname = caregiverFirstname;
     }
 
+    /**
+     * Retrieves the phone number of the caregiver associated with this treatment.
+     *
+     * @return The caregiver's phone number.
+     */
+
     public String getCaregiverPhonenumber() {
         return caregiverPhonenumber;
     }
+
+    /**
+     * Sets the phone number of the caregiver associated with this treatment.
+     *
+     * @param caregiverPhonenumber The phone number of the caregiver.
+     */
 
     public void setCaregiverPhonenumber(String caregiverPhonenumber) {
         this.caregiverPhonenumber = caregiverPhonenumber;

@@ -111,6 +111,16 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Populates the caregiver selection ComboBox with active caregivers.
+     * Clears existing selections, adds a default "alle" option, and retrieves all caregivers from the database.
+     * Only active caregivers are added to the selection list.
+     *
+     * Upon successful retrieval, the ComboBox is updated with the caregiver surnames and defaults to the first selection.
+     *
+     * @throws SQLException If an error occurs while retrieving caregiver data from the database.
+     */
+
     private void createComboBoxPatientData() {
         patientSelection.clear();
         this.patientSelection.add("alle");
@@ -127,6 +137,16 @@ public class AllTreatmentController {
             exception.printStackTrace();
         }
     }
+
+    /**
+     * Populates the caregiver selection ComboBox with active caregivers.
+     * Clears existing selections, adds a default "alle" option, and retrieves all caregivers from the database.
+     * Only active caregivers are added to the selection list.
+     *
+     * Upon successful retrieval, the ComboBox is updated with the caregiver surnames and defaults to the first selection.
+     *
+     * @throws SQLException If an error occurs while retrieving caregiver data from the database.
+     */
 
     private void createComboBoxCaregiverData() {
         caregiverSelection.clear();
@@ -173,6 +193,15 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * Searches for a patient in the patient list by their surname.
+     * Iterates through the list and returns the matching patient if found.
+     * If no match is found, returns {@code null}.
+     *
+     * @param surname The surname of the patient to search for.
+     * @return The matching {@code Patient} object if found, otherwise {@code null}.
+     */
+
     private Patient searchPatientInList(String surname) {
         for (Patient patient : this.patientList) {
             if (patient.getSurname().equals(surname)) {
@@ -182,6 +211,15 @@ public class AllTreatmentController {
         }
         return null;
     }
+
+    /**
+     * Searches for a caregiver in the caregiver list by their surname.
+     * Iterates through the list and returns the matching caregiver if found.
+     * If no match is found, returns {@code null}.
+     *
+     * @param surname The surname of the caregiver to search for.
+     * @return The matching {@code Caregiver} object if found, otherwise {@code null}.
+     */
 
     private Caregiver searchCaregiverInList(String surname) {
         for (Caregiver caregiver : this.caregiverList) {
@@ -203,6 +241,15 @@ public class AllTreatmentController {
             exception.printStackTrace();
         }
     }
+
+    /**
+     * Handles the creation of a new treatment session by retrieving the selected patient and caregiver from the UI.
+     * Ensures that both selections are valid before opening the treatment window.
+     *
+     * If no patient or a general caregiver selection ("alle") is made, an information alert is displayed.
+     *
+     * @throws NullPointerException If no patient or a general caregiver is selected.
+     */
 
     @FXML
     public void handleNewTreatment() {

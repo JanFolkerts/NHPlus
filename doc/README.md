@@ -90,3 +90,7 @@ sowie Klassen und Methoden mit hoher Kohäsion schreibt. Wenn ihr beim Dokumenti
 ### Passwörter
 
 Gib hier nötige Benutzernamen und Passwörter an!
+
+Benutzername: admin
+
+Passwort: admin123
